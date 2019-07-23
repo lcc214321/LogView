@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiOperation;
 
 @Transactional
 @RestController
-@CrossOrigin(origins = "http://localhost:8081")
+
 @RequestMapping("${$rmp.ctr.basic}/auth")
 public class AuthController {
     @Autowired
@@ -31,6 +31,7 @@ public class AuthController {
 	
 	@ApiOperation(value = "登入", notes = "")
 	@PostMapping("login")
+	@CrossOrigin
 	public Object login(@RequestBody LoginInfo loginInfo, HttpServletRequest request) {
 		if(StringUtils.isEmpty(loginInfo.getUsername())){
 			throw new StatusException("402","用户名不能为空");

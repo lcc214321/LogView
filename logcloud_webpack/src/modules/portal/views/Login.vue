@@ -18,7 +18,7 @@
             @keyup.enter="login"
             type="text"
             id="accountValue"
-            v-model="loginInfo.accountValue"
+            v-model="loginInfo.username"
             placeholder="请输入账号"
           />
         </div>
@@ -53,7 +53,7 @@ export default {
       jwptCustomize: false,
       dialogVisible: false,
       loginInfo: {
-        accountValue: "",
+        username: "",
         password: "",
       }
     };
@@ -63,7 +63,7 @@ export default {
 
     checkAccountValue() {
       this.errorInfo = "";
-      if (!this.loginInfo.accountValue) {
+      if (!this.loginInfo.username) {
         this.errorInfo += "账号不能为空!\n";
       }
       if (this.errorInfo) {

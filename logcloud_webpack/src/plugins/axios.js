@@ -1,7 +1,9 @@
 import Vue from "vue";
 import axios from "axios";
 import router from "../router";
-import { loadProgressBar } from "axios-progress-bar";
+import {
+  loadProgressBar
+} from "axios-progress-bar";
 import networkInformationHint from "./networkInformationHint.js";
 
 const ERROR_MSG_CONFIG = require("./errorMsgConfig").default;
@@ -14,13 +16,8 @@ const ERROR_MSG_CONFIG = require("./errorMsgConfig").default;
 let config = {
   // baseURL: process.env.baseURL || process.env.apiUrl || ""
   timeout: 60 * 1000, // Timeout
-  withCredentials: true, // Check cross-site Access-Control
-  headers:{
-    "Access-Control-Allow-Headers":"Authorization,Origin, X-Requested-With, Content-Type, Accept",
-    "Access-Control-Allow-Origin":"*",
-    'Content-Type':'application/json;charset=utf-8',
-    "Access-Control-Allow-Methods":"GET,POST"
-  }
+// Check cross-site Access-Control
+
 };
 
 const _$httpWith500Msg = axios.create(config);
@@ -39,7 +36,7 @@ let wk_token, wk_key;
 
 
 _$httpWith500Msg.interceptors.request.use(
-  function(config) {
+  function (config) {
     networkInformationHint();
     // Do something before request is sent
     if (
@@ -48,6 +45,12 @@ _$httpWith500Msg.interceptors.request.use(
     ) {
       if (!wk_token) {
         const user = JSON.parse(window.sessionStorage.getItem("user"));
+        config.headers = {
+          "Access-Control-Allow-Headers": "Authorization,Origin, X-Requested-With, Content-Type, Accept",
+          "Access-Control-Allow-Origin": "http://localhost",
+          'Content-Type': 'application/json;charset=utf-8',
+          "Access-Control-Allow-Methods": "GET,POST"
+        }
         if (!user) {
           if (
             window.___lastInvalidDate === undefined ||
@@ -80,7 +83,7 @@ _$httpWith500Msg.interceptors.request.use(
     }
     return config;
   },
-  function(error) {
+  function (error) {
     // Do something with request error
     Vue.prototype.$notify({
       showClose: true,
@@ -93,7 +96,7 @@ _$httpWith500Msg.interceptors.request.use(
 
 _$http.interceptors.request.use(
   // no auto 500 error UI
-  function(config) {
+  function (config) {
     networkInformationHint();
     // Do something before request is sent
     if (config.url.includes("/login") === false) {
@@ -126,7 +129,7 @@ _$http.interceptors.request.use(
     }
     return config;
   },
-  function(error) {
+  function (error) {
     // Do something with request error
     Vue.prototype.$notify({
       showClose: true,
@@ -152,12 +155,12 @@ const recordRequest = response => {
     //   "解析出错"
     // ]);
   }
-//   window._hmt.push([
-//     "_trackEvent",
-//     `页面-${matchedRoutePath || location.pathname}`,
-//     "网络请求-响应",
-//     new URL(response.config.url, "http://www.qmth.com.cn").pathname
-//   ]);
+  //   window._hmt.push([
+  //     "_trackEvent",
+  //     `页面-${matchedRoutePath || location.pathname}`,
+  //     "网络请求-响应",
+  //     new URL(response.config.url, "http://www.qmth.com.cn").pathname
+  //   ]);
 };
 // Add a response interceptor
 _$httpWith500Msg.interceptors.response.use(
@@ -298,7 +301,7 @@ _$http.interceptors.response.use(
 
 _$httpWithoutBar.interceptors.request.use(
   // no auto 500 error UI
-  function(config) {
+  function (config) {
     networkInformationHint();
     // Do something before request is sent
     if (config.url.includes("/login") === false) {
@@ -331,7 +334,7 @@ _$httpWithoutBar.interceptors.request.use(
     }
     return config;
   },
-  function(error) {
+  function (error) {
     // Do something with request error
     Vue.prototype.$notify({
       showClose: true,
@@ -395,7 +398,7 @@ _$httpWithoutBar.interceptors.response.use(
   }
 );
 
-Plugin.install = function(Vue) {
+Plugin.install = function (Vue) {
   Vue.$http = _$http; // no auto 500 error UI
   Object.defineProperties(Vue.prototype, {
     $http: {
