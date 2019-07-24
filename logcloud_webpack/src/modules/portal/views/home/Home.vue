@@ -21,22 +21,12 @@
           title="退出系统"
           @click="logout"
         >
-          <v-icon name="sign-out-alt" />
           <span style="cursor: pointer"> 退出 </span>
         </el-menu-item>
         <el-menu-item index="3" style="float: right;" title="个人信息管理">
-          <v-icon name="user" />
           <span @click="openUserDialog" style="cursor: pointer">
-            {{ user.displayName }}
+            {{ user.username }}
           </span>
-        </el-menu-item>
-        <el-menu-item
-          index="2"
-          class="navbar-group-item"
-          style="float: right;"
-          title="机构名称"
-        >
-          <v-icon name="users" /> {{ user.rootOrgName }}
         </el-menu-item>
       </el-menu>
     </el-header>
@@ -60,14 +50,7 @@
           <el-form :inline="true" label-position="right" label-width="90px">
             <el-row :gutter="10">
               <el-col>
-                <el-tag
-                  v-for="role in user.roleList"
-                  :key="role.roleId"
-                  type="primary"
-                  style="margin-left:10px;margin-top:10px;"
-                >
-                  {{ role.roleName }}
-                </el-tag>
+                 {{user.userType}}
               </el-col>
             </el-row>
           </el-form>
@@ -152,7 +135,7 @@ export default {
     };
   },
   computed: {
-    //...mapState({ user: state => state.user }),
+    ...mapState({ user: state => state.user }),
     ifShowHomeSide() {
       return this.$route.fullPath.startsWith("/home") === false;
     },
@@ -174,7 +157,7 @@ export default {
           var userId = this.user.userId;
           var password = encodeURIComponent(this.passForm.pass);
           var url =
-            CORE_API +
+            BASIC_API +
             "/user/password?userId=" +
             userId +
             "&password=" +
@@ -198,23 +181,15 @@ export default {
       this.$refs.passForm.resetFields();
     },
     logout() {
-      const orgId = this.user.rootOrgId;
-      const getRootOrgId = () => {
-        if (location.hostname.includes("qmth.com.cn")) {
-          return "";
-        } else {
-          return "?orgId=" + orgId;
-        }
-      };
+     
 
       this.$http
-        .post(CORE_API + "/auth/logout")
+        .post(BASIC_API + "/auth/logout")
         .then(() => {
           this.USER_SIGNOUT();
           window.name = "";
           this.$router.replace({
-            path: "/login" + getRootOrgId()
-          });
+            path: "/login"          });
         })
         .catch(response => {
           if (response.status == 500) {
@@ -227,7 +202,7 @@ export default {
           this.USER_SIGNOUT();
           window.name = "";
           this.$router.replace({
-            path: "/login" + getRootOrgId()
+            path: "/login"
           });
         });
     }

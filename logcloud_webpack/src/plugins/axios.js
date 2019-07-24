@@ -16,8 +16,9 @@ const ERROR_MSG_CONFIG = require("./errorMsgConfig").default;
 let config = {
   // baseURL: process.env.baseURL || process.env.apiUrl || ""
   timeout: 60 * 1000, // Timeout
+  baseURL:"http://localhost:8081",
 // Check cross-site Access-Control
-
+  withCredentials: true
 };
 
 const _$httpWith500Msg = axios.create(config);
@@ -45,12 +46,6 @@ _$httpWith500Msg.interceptors.request.use(
     ) {
       if (!wk_token) {
         const user = JSON.parse(window.sessionStorage.getItem("user"));
-        config.headers = {
-          "Access-Control-Allow-Headers": "Authorization,Origin, X-Requested-With, Content-Type, Accept",
-          "Access-Control-Allow-Origin": "http://localhost",
-          'Content-Type': 'application/json;charset=utf-8',
-          "Access-Control-Allow-Methods": "GET,POST"
-        }
         if (!user) {
           if (
             window.___lastInvalidDate === undefined ||

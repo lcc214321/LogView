@@ -100,7 +100,7 @@ export default {
       if (!this.checkPassword()) {
         return;
       }
-      var url ="http://localhost:8081"+BASIC_API+ "/auth/login";
+      var url =BASIC_API+ "/auth/login";
       this.$httpWithMsg
         .post(url, this.loginInfo)
         .then(response => {

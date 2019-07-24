@@ -18,6 +18,7 @@ import cn.cloud.log.basic.bean.LoginInfo;
 import cn.cloud.log.basic.bean.User;
 import cn.cloud.log.basic.po.UserPo;
 import cn.cloud.log.basic.service.UserService;
+import cn.cloud.log.common.web.ControllerSupport;
 import cn.cloud.log.exception.StatusException;
 import io.swagger.annotations.ApiOperation;
 
@@ -25,13 +26,13 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 
 @RequestMapping("${$rmp.ctr.basic}/auth")
-public class AuthController {
+public class AuthController extends ControllerSupport{
     @Autowired
     UserService userservice;
 	
 	@ApiOperation(value = "登入", notes = "")
 	@PostMapping("login")
-	@CrossOrigin
+	@CrossOrigin(allowCredentials="true")
 	public Object login(@RequestBody LoginInfo loginInfo, HttpServletRequest request) {
 		if(StringUtils.isEmpty(loginInfo.getUsername())){
 			throw new StatusException("402","用户名不能为空");
@@ -50,6 +51,7 @@ public class AuthController {
 			}
 			//将user信息记入session中
 			HttpSession session=request.getSession();
+			System.out.println(session.getId());
 			String key="U_S_"+userpo.getId();
 			String token=UUID.randomUUID().toString();
 			session.setAttribute("key", key);
@@ -69,5 +71,13 @@ public class AuthController {
 		
 		
 		
+	}
+	@ApiOperation(value = "登出", notes = "")
+	@PostMapping("logout")
+	@CrossOrigin(allowCredentials="true")
+	public void logout(HttpServletRequest request){
+		HttpSession session=request.getSession(false);
+		System.out.println(session.getId());
+		System.out.println(123);
 	}
 }
