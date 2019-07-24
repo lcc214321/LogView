@@ -65,6 +65,17 @@
             label-position="right"
             label-width="80px"
           >
+           <el-row>
+              <el-form-item label="旧密码" prop="pass">
+                <el-input
+                  type="password"
+                  style="width: 150px"
+                  v-model="passForm.oldpassword"
+                  auto-complete="off"
+                  placeholder="请输入旧密码"
+                />
+              </el-form-item>
+            </el-row>
             <el-row>
               <el-form-item label="密码" prop="pass">
                 <el-input
@@ -125,12 +136,20 @@ export default {
         callback();
       }
     };
+    var validatePass3 = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入旧密码"));
+      } else {
+        callback();
+      }
+    };
     return {
       userDialog: false,
-      passForm: { pass: "", checkPass: "" },
+      passForm: { pass: "", checkPass: "",oldpassword:""},
       passRules: {
         pass: [{ validator: validatePass, trigger: "blur" }],
-        checkPass: [{ validator: validatePass2, trigger: "blur" }]
+        checkPass: [{ validator: validatePass2, trigger: "blur" }],
+        oldpassword: [{ validator: validatePass3, trigger: "blur" }]
       }
     };
   },
@@ -147,20 +166,20 @@ export default {
   methods: {
     ...mapActions([USER_SIGNOUT]),
     openUserDialog() {
-      this.passForm = { pass: "", checkPass: "" };
+      this.passForm = { pass: "", checkPass: "" ,oldpassword:""};
       this.userDialog = true;
     },
     //保存密码
     submitForm() {
       this.$refs.passForm.validate(valid => {
-        if (valid) {
-          var userId = this.user.userId;
+        if (valid) {   
           var password = encodeURIComponent(this.passForm.pass);
+          var oldpassword=encodeURIComponent(this.passForm.oldpassword)
           var url =
             BASIC_API +
-            "/user/password?userId=" +
-            userId +
-            "&password=" +
+            "/user/password?oldpassword=" +
+            oldpassword +
+            "&newpassword=" +
             password;
           this.$httpWithMsg.put(url).then(() => {
             this.$notify({

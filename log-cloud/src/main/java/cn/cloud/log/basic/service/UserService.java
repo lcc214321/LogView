@@ -11,4 +11,5 @@ public interface UserService{
 	public UserPo saveUser(UserPo user);
 	public List<UserPo> findUserPo(String username,UserType type);
 	public UserPo findUser(String username);
+	public UserPo findUserById(long id);
 }

@@ -41,4 +41,10 @@ public class UserServiceImpl implements UserService{
 		UserPo user=userdao.findByusername(username);
 		return user;
 	}
+
+	@Override
+	public UserPo findUserById(long id) {
+		// TODO Auto-generated method stub
+		return userdao.findByid(id);
+	}
 }

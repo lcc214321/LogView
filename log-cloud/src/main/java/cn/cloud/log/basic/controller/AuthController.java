@@ -77,7 +77,8 @@ public class AuthController extends ControllerSupport{
 	@CrossOrigin(allowCredentials="true")
 	public void logout(HttpServletRequest request){
 		HttpSession session=request.getSession(false);
-		System.out.println(session.getId());
-		System.out.println(123);
+		session.invalidate();//注销session
 	}
+	
+	
 }
