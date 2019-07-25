@@ -12,7 +12,7 @@
               src="./icon.png"
               style="margin-bottom: 2px; line-height: 48px; display: inline-block"
             />
-            云平台主页
+            日志采集工具
           </router-link>
         </el-menu-item>
         <el-menu-item
@@ -66,7 +66,7 @@
             label-width="80px"
           >
            <el-row>
-              <el-form-item label="旧密码" prop="pass">
+              <el-form-item label="旧密码" prop="oldpassword">
                 <el-input
                   type="password"
                   style="width: 150px"
@@ -117,7 +117,7 @@ import { BASIC_API } from "../../../../../constants/constants.js";
 export default {
   name: "Home",
   data() {
-    var validatePass = (rule, value, callback) => {
+    var validatePass3 = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请输入密码"));
       } else {
@@ -136,7 +136,7 @@ export default {
         callback();
       }
     };
-    var validatePass3 = (rule, value, callback) => {
+    var validatePass = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请输入旧密码"));
       } else {
@@ -147,9 +147,9 @@ export default {
       userDialog: false,
       passForm: { pass: "", checkPass: "",oldpassword:""},
       passRules: {
-        pass: [{ validator: validatePass, trigger: "blur" }],
+        pass: [{ validator: validatePass3, trigger: "blur" }],
         checkPass: [{ validator: validatePass2, trigger: "blur" }],
-        oldpassword: [{ validator: validatePass3, trigger: "blur" }]
+        oldpassword: [{ validator: validatePass, trigger: "blur" }]
       }
     };
   },

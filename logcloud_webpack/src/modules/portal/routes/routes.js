@@ -3,6 +3,7 @@ import Home from "../views/home/Home.vue";
 import HomeMain from "../views/home/main/HomeMain.vue";
 import Component404 from "../views/Component404.vue";
 
+
 export default [
   {
     path: "/",
