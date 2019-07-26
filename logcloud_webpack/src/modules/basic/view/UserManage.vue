@@ -1,20 +1,20 @@
 <template>
   <div class="user">
-      <el-form inline :model="formSearch" label-width="70px" ref="primaryForm" style="float:left">
-        <el-form-item label="用户名称">
-          <el-input class="input_width_lg" placeholder="请输入用户名称" v-model="formSearch.queryUserName" />
-        </el-form-item>
-        <el-form-item label="角色类型">
-          <el-select v-model="formSearch.queryUserType" placeholder="请选择">
-            <el-option label="日志查看员" value="Log_viewer"></el-option>
-            <el-option label="超级管理员" value="Super_admin"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item class="d-block">
-            <el-button type="primary" size="small" icon="el-icon-search">查询</el-button>
-            <el-button type="primary" size="small" icon="el-icon-plus" @click="handleadd">创建</el-button>
-        </el-form-item>
-      </el-form>
+    <el-form inline :model="formSearch" label-width="70px" ref="primaryForm" style="float:left">
+      <el-form-item label="用户名称">
+        <el-input class="input_width_lg" placeholder="请输入用户名称" v-model="formSearch.queryUserName" />
+      </el-form-item>
+      <el-form-item label="角色类型">
+        <el-select v-model="formSearch.queryUserType" placeholder="请选择">
+          <el-option label="日志查看员" value="Log_viewer"></el-option>
+          <el-option label="超级管理员" value="Super_admin"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item class="d-block">
+        <el-button type="primary" size="small" icon="el-icon-search">查询</el-button>
+        <el-button type="primary" size="small" icon="el-icon-plus" @click="handleadd">创建</el-button>
+      </el-form-item>
+    </el-form>
     <div class="usertable" style="margin-top:20px">
       <el-table :data="userlist" style="width: 100%" border>
         <el-table-column prop="username" label="用户名称" width="180">
@@ -207,11 +207,30 @@
         this.UserForm = {
           UserName: row.username,
           UserType: row.usertype,
-          Status: row.status
+          Status: row.status,
+          UserId: row.id
         }
+
       },
       handleEnable(index, row) {
+        var confirmstr="是否启用用户"
+        if(row.status==false){
 
+        }
+        this.$confirm("是否删除这些课程？", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "error"
+        }).then(() => {
+          var url = CORE_API + "/course/" + this.courseIds;
+          this.$httpWithMsg.delete(url).then(() => {
+            this.$notify({
+              type: "success",
+              message: "删除成功！"
+            });
+            this.searchForm();
+          });
+        });
       },
       handleDelete(index, row) {
 
@@ -229,10 +248,38 @@
         this.addingDialog = false
       },
       adduser() {
-        var url = BASIC_API + "/user/userPage/" + (this.curpageIndex - 1) + "/" + this.curpageSize
+        var url = BASIC_API + "/user/add"
+        var userinfo = {
+          username: this.UserForm.UserName,
+          userType: this.UserForm.UserType,
+          status: this.UserForm.Status,
+          password: this.UserForm.pass
+        }
+        this.$httpWithMsg.post(url, userinfo).then(() => {
+          this.$notify({
+            type: "success",
+            message: "新增用户成功！"
+          });
+          this.getUserPage();
+          this.addingDialog = false;
+        });
       },
       edituser() {
-
+        var url = BASIC_API + "/user/edit"
+        var userinfo = {
+          userid: this.UserForm.UserId,
+          username: this.UserForm.UserName,
+          userType: this.UserForm.UserType,
+          status: this.UserForm.Status
+        }
+        this.$httpWithMsg.put(url, userinfo).then(() => {
+          this.$notify({
+            type: "success",
+            message: "修改用户成功！"
+          });
+          this.getUserPage();
+          this.editDialog = false;
+        });
       }
     },
     watch: {
