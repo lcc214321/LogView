@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import cn.cloud.log.basic.dao.UserDao;
@@ -46,5 +49,11 @@ public class UserServiceImpl implements UserService{
 	public UserPo findUserById(long id) {
 		// TODO Auto-generated method stub
 		return userdao.findByid(id);
+	}
+
+	@Override
+	public Page<UserPo> findAll(Specification<UserPo> specification, PageRequest pageRequest) {
+		// TODO Auto-generated method stub
+		return userdao.findAll(specification, pageRequest);
 	}
 }

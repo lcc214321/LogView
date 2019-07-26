@@ -8,6 +8,8 @@ public class User {
 	private String key;
 	private String token;
 	private UserType userType;
+	private String password;
+	private boolean status=true;
 	public String getUsername() {
 		return username;
 	}
@@ -46,6 +48,22 @@ public class User {
 
 	public void setUserType(UserType userType) {
 		this.userType = userType;
+	}
+
+	public boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	

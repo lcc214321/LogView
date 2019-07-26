@@ -32,6 +32,7 @@
     </el-header>
 
     <el-container>
+      <HomeSide v-if="ifShowHomeSide" :key="sideKey" />
       <el-container class="main-body">
         <router-view class="main-content"></router-view>
         <el-footer class="footer">&copy; 启明泰和 2019</el-footer>
@@ -110,6 +111,7 @@
 </template>
 
 <script>
+import HomeSide from "./HomeSide.vue"
 import { mapActions, mapState } from "vuex";
 import { USER_SIGNOUT } from "../../store/user";
 import { BASIC_API } from "../../../../../constants/constants.js";
@@ -163,6 +165,7 @@ export default {
       return module;
     }
   },
+  components:{HomeSide},
   methods: {
     ...mapActions([USER_SIGNOUT]),
     openUserDialog() {

@@ -9,6 +9,7 @@
       >
         <div
           :class="['module-card', index % 2 ? 'float-left' : 'float-right']"
+          @click="() => $router.push('/' + menu.ext4)"
         >
           <div style="position: relative">
             <img :class="['module-image', menu.ext4 + '-main-module']" />

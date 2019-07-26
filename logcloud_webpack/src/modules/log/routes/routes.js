@@ -1,11 +1,11 @@
 import logcollect from "../view/LogManage.vue"
 export default [
     {
-      path: "/basic", //基础信息
+      path: "/log", //基础信息
       component: Home,
       children: [
         {
-          path: "log", //
+          path: "logmanage", //
           //meta: { privilegeCodes: "index_course" },
           component: logcollect
         }
