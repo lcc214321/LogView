@@ -56,4 +56,10 @@ public class UserServiceImpl implements UserService{
 		// TODO Auto-generated method stub
 		return userdao.findAll(specification, pageRequest);
 	}
+
+	@Override
+	public void deleteUser(UserPo userpo) {
+		// TODO Auto-generated method stub
+		userdao.delete(userpo);
+	}
 }

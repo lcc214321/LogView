@@ -11,7 +11,7 @@
         </el-select>
       </el-form-item>
       <el-form-item class="d-block">
-        <el-button type="primary" size="small" icon="el-icon-search">查询</el-button>
+        <el-button type="primary" size="small" icon="el-icon-search" @click="getUserPage">查询</el-button>
         <el-button type="primary" size="small" icon="el-icon-plus" @click="handleadd">创建</el-button>
       </el-form-item>
     </el-form>
@@ -32,7 +32,7 @@
           <template slot-scope="scope">
             <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
             <el-button size="mini" type="danger" @click="handleEnable(scope.$index, scope.row)">
-              {{scope.row.status?"启用":"禁用"}}
+              {{scope.row.status?"禁用":"启用"}}
             </el-button>
             <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
@@ -181,7 +181,8 @@
     },
     methods: {
       async getUserPage() {
-        var url = BASIC_API + "/user/userPage/" + (this.curpageIndex - 1) + "/" + this.curpageSize
+        var param = new URLSearchParams(this.formSearch);
+        var url = BASIC_API + "/user/userPage/" + (this.curpageIndex - 1) + "/" + this.curpageSize+"?"+param
         this.userPage = this.$httpWithMsg
           .get(url)
           .then(response => {
@@ -213,27 +214,44 @@
 
       },
       handleEnable(index, row) {
-        var confirmstr="是否启用用户"
+        var confirmstr="是否禁用用用户"
+        var statustr="disable"
+        var notifymessage="禁用成功"
         if(row.status==false){
-
+           confirmstr="是否启用用户"
+           statustr="enable"
+           notifymessage="启用成功"
         }
-        this.$confirm("是否删除这些课程？", "提示", {
+        this.$confirm(confirmstr, "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "error"
         }).then(() => {
-          var url = CORE_API + "/course/" + this.courseIds;
-          this.$httpWithMsg.delete(url).then(() => {
+          var url = BASIC_API + "/user/" + statustr+"/"+row.id;
+          this.$httpWithMsg.put(url).then(() => {
             this.$notify({
               type: "success",
-              message: "删除成功！"
+              message: notifymessage
             });
-            this.searchForm();
+            this.getUserPage();
           });
         });
       },
       handleDelete(index, row) {
-
+        this.$confirm("是否删除用户?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "error"
+        }).then(() => {
+          var url = BASIC_API + "/user/" +row.id;
+          this.$httpWithMsg.delete(url).then(() => {
+            this.$notify({
+              type: "success",
+              message: "删除用户成功!"
+            });
+            this.getUserPage();
+          });
+        });
       },
       handleCurrentChange(val) {
         this.currentPage = val;

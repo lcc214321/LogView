@@ -17,4 +17,5 @@ public interface UserService{
 	public UserPo findUser(String username);
 	public UserPo findUserById(long id);
 	public Page<UserPo> findAll(Specification<UserPo> specification,PageRequest pageRequest);
+	public void deleteUser(UserPo user);
 }

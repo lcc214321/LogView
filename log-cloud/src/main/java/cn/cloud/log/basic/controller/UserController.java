@@ -16,6 +16,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -64,14 +65,14 @@ public class UserController extends ControllerSupport {
 	@GetMapping("userPage/{curPage}/{pageSize}")
 	@CrossOrigin(allowCredentials="true")
 	public Page<UserPo> getuserPage(@PathVariable Integer curPage,
-			@PathVariable Integer pageSize,@RequestParam(name="username",required = false)String username,@RequestParam(name="usertype",required = false) String usertype){
+			@PathVariable Integer pageSize,@RequestParam(name="queryUserName",required = false)String username,@RequestParam(name="queryUserType",required = false) String usertype){
 		Specification<UserPo> specification = (root, query, cb) -> {
 			List<Predicate> predicates = new ArrayList<>();
 			if (!StringUtils.isEmpty(username)) {
 				predicates.add(cb.like(root.get("username"), toSqlSearchPattern(username)));
 			}
 			if (!StringUtils.isEmpty(usertype)) {
-				predicates.add(cb.like(root.get("usertype"), toSqlSearchPattern(usertype)));
+				predicates.add(cb.like(root.get("usertype"), UserType.valueOf(usertype)));
 			}
 		
 
@@ -131,7 +132,27 @@ public class UserController extends ControllerSupport {
 		userservice.saveUser(userpo);
 	}
 	
+	@ApiOperation(value = "启用禁用用户", notes = "")
+	@PutMapping("{status}/{userid}")
+	@CrossOrigin(allowCredentials="true")
+	public void resetuserPassword(@PathVariable String status,
+			@PathVariable long userid){
+		UserPo userpo=userservice.findUserById(userid);
+		if(status.equals("enable")){
+			userpo.setStatus(true);
+		}else{
+			userpo.setStatus(false);
+		}	
+		userservice.saveUser(userpo);
+	}
 	
+	@ApiOperation(value = "删除用户", notes = "")
+	@DeleteMapping("{userid}")
+	@CrossOrigin(allowCredentials="true")
+	public void deleteUser(@PathVariable long userid){
+		UserPo userpo=userservice.findUserById(userid);
+		userservice.deleteUser(userpo);
+	}
 	
 	
 }
