@@ -72,7 +72,7 @@ public class UserController extends ControllerSupport {
 				predicates.add(cb.like(root.get("username"), toSqlSearchPattern(username)));
 			}
 			if (!StringUtils.isEmpty(usertype)) {
-				predicates.add(cb.like(root.get("usertype"), UserType.valueOf(usertype)));
+				predicates.add(cb.like(root.get("usertype"), usertype));
 			}
 		
 
@@ -98,7 +98,7 @@ public class UserController extends ControllerSupport {
 		}
 		UserPo userpo=new UserPo();
 		userpo.setUsername(userinfo.getUsername());
-		userpo.setUsertype(userinfo.getUserType());
+		userpo.setUsertype(userinfo.getUserType().name());
 		userpo.setPassword(userinfo.getPassword());
 		userpo.setStatus(userinfo.getStatus());
 		userpo.setUpdatetime(new Date().toString());
@@ -117,7 +117,7 @@ public class UserController extends ControllerSupport {
 		}
 		UserPo userpo=userservice.findUserById(userinfo.getUserid());
 		userpo.setUsername(userinfo.getUsername());
-		userpo.setUsertype(userinfo.getUserType());
+		userpo.setUsertype(userinfo.getUserType().name());
 		userpo.setStatus(userinfo.getStatus());
 		userpo.setUpdatetime(new Date().toString());
 		userservice.saveUser(userpo);

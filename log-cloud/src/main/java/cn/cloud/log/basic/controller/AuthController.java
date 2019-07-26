@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import cn.cloud.log.basic.bean.LoginInfo;
 import cn.cloud.log.basic.bean.User;
 import cn.cloud.log.basic.po.UserPo;
+import cn.cloud.log.basic.po.UserType;
 import cn.cloud.log.basic.service.UserService;
 import cn.cloud.log.common.web.ControllerSupport;
 import cn.cloud.log.exception.StatusException;
@@ -61,7 +62,7 @@ public class AuthController extends ControllerSupport{
 			user.setToken(token);
 			user.setUsername(userpo.getUsername());
 			user.setUserid(userpo.getId());
-			user.setUserType(userpo.getUsertype());
+			user.setUserType(UserType.valueOf(userpo.getUsertype()));
 			return user;
 		}else{
 			throw new StatusException("402","用户名或密码不正确");
