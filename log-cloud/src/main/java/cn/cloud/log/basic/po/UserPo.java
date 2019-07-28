@@ -25,8 +25,7 @@ public class UserPo implements Serializable {
 	@Column(nullable = false, unique = false, name = "password")
 	private String password;// key
 	@Column(nullable = false, unique = false, name = "usertype")
-	@Enumerated(EnumType.STRING)
-	private UserType usertype;// key
+	private String usertype;// key
 	@Column(nullable = true, unique = false, name = "updatetime")
 	private String updatetime;
 	@Column(nullable = false, unique = false, name = "enable")
@@ -55,11 +54,11 @@ public class UserPo implements Serializable {
 		this.password = password;
 	}
 
-	public UserType getUsertype() {
+	public String getUsertype() {
 		return usertype;
 	}
 
-	public void setUsertype(UserType usertype) {
+	public void setUsertype(String usertype) {
 		this.usertype = usertype;
 	}
 

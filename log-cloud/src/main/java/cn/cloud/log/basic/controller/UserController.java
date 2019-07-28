@@ -32,6 +32,7 @@ import cn.cloud.log.basic.po.UserType;
 import cn.cloud.log.basic.service.UserService;
 import cn.cloud.log.common.web.ControllerSupport;
 import cn.cloud.log.exception.StatusException;
+import cn.cloud.log.util.DateUtil;
 import io.swagger.annotations.ApiOperation;
 
 /**
@@ -72,7 +73,7 @@ public class UserController extends ControllerSupport {
 				predicates.add(cb.like(root.get("username"), toSqlSearchPattern(username)));
 			}
 			if (!StringUtils.isEmpty(usertype)) {
-				predicates.add(cb.like(root.get("usertype"), UserType.valueOf(usertype)));
+				predicates.add(cb.like(root.get("usertype"), usertype));
 			}
 		
 
@@ -98,10 +99,10 @@ public class UserController extends ControllerSupport {
 		}
 		UserPo userpo=new UserPo();
 		userpo.setUsername(userinfo.getUsername());
-		userpo.setUsertype(userinfo.getUserType());
+		userpo.setUsertype(userinfo.getUserType().name());
 		userpo.setPassword(userinfo.getPassword());
 		userpo.setStatus(userinfo.getStatus());
-		userpo.setUpdatetime(new Date().toString());
+		userpo.setUpdatetime(DateUtil.getNowDate());
 		userservice.saveUser(userpo);
 	}
 	
@@ -117,9 +118,9 @@ public class UserController extends ControllerSupport {
 		}
 		UserPo userpo=userservice.findUserById(userinfo.getUserid());
 		userpo.setUsername(userinfo.getUsername());
-		userpo.setUsertype(userinfo.getUserType());
+		userpo.setUsertype(userinfo.getUserType().name());
 		userpo.setStatus(userinfo.getStatus());
-		userpo.setUpdatetime(new Date().toString());
+		userpo.setUpdatetime(DateUtil.getNowDate());
 		userservice.saveUser(userpo);
 	}
 	
@@ -143,6 +144,7 @@ public class UserController extends ControllerSupport {
 		}else{
 			userpo.setStatus(false);
 		}	
+		userpo.setUpdatetime(DateUtil.getNowDate());
 		userservice.saveUser(userpo);
 	}
 	
