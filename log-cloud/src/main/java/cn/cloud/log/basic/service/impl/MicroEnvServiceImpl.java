@@ -24,7 +24,7 @@ public class MicroEnvServiceImpl implements MicroEnvService {
 	@Override
 	public MicroServicePo findMicroEnvByid(Long id) {
 		// TODO Auto-generated method stub
-		return microenvdao.findbyid(id);
+		return microenvdao.findByid(id);
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class MicroEnvServiceImpl implements MicroEnvService {
 	@Override
 	public List<MicroServicePo> findMicroEnvByEnvId(Long id) {
 		// TODO Auto-generated method stub
-		return microenvdao.findbyenvid(id);
+		return microenvdao.findByenvid(id);
 	}
     
 	

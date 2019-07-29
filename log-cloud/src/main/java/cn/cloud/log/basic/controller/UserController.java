@@ -136,7 +136,7 @@ public class UserController extends ControllerSupport {
 	@ApiOperation(value = "启用禁用用户", notes = "")
 	@PutMapping("{status}/{userid}")
 	@CrossOrigin(allowCredentials="true")
-	public void resetuserPassword(@PathVariable String status,
+	public void edituserstatus(@PathVariable String status,
 			@PathVariable long userid){
 		UserPo userpo=userservice.findUserById(userid);
 		if(status.equals("enable")){

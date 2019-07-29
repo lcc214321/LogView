@@ -1,14 +1,22 @@
 package cn.cloud.log.basic.bean;
 
-public class MicroEnvInfo {
+import java.io.Serializable;
+
+public class MicroEnvInfo implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4090304759448664162L;
 	private Long id;
-	private Long envid;// 用户名称
+	private Long envid;// 环境id
+	private Long envName;//环境名称
 	private String microservicename;// key
 	private String ipaddr;// key
 	private String ostype;// key
 	private String loginuser;// key
 	private String logpath;// key 日志存储路径
 	private String lognamepattern;// key
+	private String loginpassword;
 	private String logpattern;// key
 	private String lognamepostfix;// key
 	private String splitstr;// key
@@ -109,4 +117,22 @@ public class MicroEnvInfo {
 	public void setUpdatetime(String updatetime) {
 		this.updatetime = updatetime;
 	}
+
+	public String getLoginpassword() {
+		return loginpassword;
+	}
+
+	public void setLoginpassword(String loginpassword) {
+		this.loginpassword = loginpassword;
+	}
+
+	public Long getEnvName() {
+		return envName;
+	}
+
+	public void setEnvName(Long envName) {
+		this.envName = envName;
+	}
+
+
 }

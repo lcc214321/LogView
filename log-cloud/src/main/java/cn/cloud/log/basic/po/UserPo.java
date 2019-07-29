@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /*
  * 用户数据库存储对象
  */
@@ -34,9 +36,6 @@ public class UserPo implements Serializable {
 		return id;
 	}
 
-	public void setId(Long id) {
-		id = id;
-	}
 
 	public String getUsername() {
 		return username;
@@ -45,7 +44,7 @@ public class UserPo implements Serializable {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
+	@JsonIgnore 
 	public String getPassword() {
 		return password;
 	}

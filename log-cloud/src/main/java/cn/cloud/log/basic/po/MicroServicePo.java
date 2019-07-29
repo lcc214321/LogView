@@ -7,7 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * 微服务存储
@@ -28,7 +32,9 @@ public class MicroServicePo implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column(nullable = false, unique = false, name = "envid")
-	private Long envid;// 用户名称
+	private Long envid;
+	@Column(nullable = false, unique = false, name = "envname")
+    private String envname;// 环境名称
 	@Column(nullable = false, unique = false, name = "microservicename")
 	private String microservicename;// key
 	@Column(nullable = false, unique = false, name = "ipaddr")
@@ -51,7 +57,7 @@ public class MicroServicePo implements Serializable {
 	private String splitstr;// key
 	@Column(nullable = false, unique = false, name = "updatetime")
 	private String updatetime;// key
-
+	
 	public Long getEnvid() {
 		return envid;
 	}
@@ -59,6 +65,15 @@ public class MicroServicePo implements Serializable {
 	public void setEnvid(Long envid) {
 		this.envid = envid;
 	}
+
+	public String getEnvname() {
+		return envname;
+	}
+    
+	public void setEnvname(String envname) {
+		this.envname = envname;
+	}
+	
 
 	public String getMicroservicename() {
 		return microservicename;
@@ -91,7 +106,7 @@ public class MicroServicePo implements Serializable {
 	public void setLoginuser(String loginuser) {
 		this.loginuser = loginuser;
 	}
-
+	@JsonIgnore  
 	public String getLoginpassword() {
 		return loginpassword;
 	}

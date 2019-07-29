@@ -28,8 +28,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cn.cloud.log.basic.bean.EnvInfo;
 import cn.cloud.log.basic.bean.User;
+import cn.cloud.log.basic.dao.MicroEnvDao;
 import cn.cloud.log.basic.po.EnvPo;
+import cn.cloud.log.basic.po.MicroServicePo;
 import cn.cloud.log.basic.service.EnvService;
+import cn.cloud.log.basic.service.MicroEnvService;
 import cn.cloud.log.common.web.ControllerSupport;
 import cn.cloud.log.exception.StatusException;
 import cn.cloud.log.util.DateUtil;
@@ -42,6 +45,8 @@ import io.swagger.annotations.ApiOperation;
 public class EnvController extends ControllerSupport {
 	@Autowired
     EnvService envservice;
+	@Autowired
+	MicroEnvDao microdao;
 	
 	@ApiOperation(value = "查找所有环境分页", notes = "")
 	@GetMapping("envPage/{curPage}/{pageSize}")
@@ -85,18 +90,32 @@ public class EnvController extends ControllerSupport {
 			throw new StatusException("225","环境名称不能为空");
 		}
 		EnvPo envpo=envservice.findEnvByid(envinfo.getId());
-		envpo.setEnvname(envinfo.getEnvname());
+		if(!envpo.getEnvname().equals(envinfo.getEnvname())){
+			envpo.setEnvname(envinfo.getEnvname());
+			//更新微服务名称
+			microdao.updateEnvNamebyEnvId(envinfo.getId(), envinfo.getEnvname());
+		}
 		envpo.setRemark(envinfo.getRemark());
 		envpo.setUpdatetime(DateUtil.getNowDate());
 		envservice.SaveEnv(envpo);
 	}
+	
+	@ApiOperation(value = "获取所有环境", notes = "")
+	@GetMapping("queryEnvList")
+	@CrossOrigin(allowCredentials="true")
+	public List<EnvPo> getEnvList(){
+		return envservice.findAllEnv();
+	}
+	
+	
+	
 	
 	
 	
 	@ApiOperation(value = "启用禁用环境", notes = "")
 	@PutMapping("{status}/{EnvId}")
 	@CrossOrigin(allowCredentials="true")
-	public void resetuserPassword(@PathVariable String status,
+	public void editenvstatus(@PathVariable String status,
 			@PathVariable long EnvId){
 		EnvPo envpo=envservice.findEnvByid(EnvId);
 		if(status.equals("enable")){
@@ -111,8 +130,12 @@ public class EnvController extends ControllerSupport {
 	@ApiOperation(value = "删除环境", notes = "")
 	@DeleteMapping("{envid}")
 	@CrossOrigin(allowCredentials="true")
-	public void deleteUser(@PathVariable long envid){
+	public void deleteEnv(@PathVariable long envid){
 		EnvPo envpo=envservice.findEnvByid(envid);
+		List<MicroServicePo> microlist=microdao.findByenvid(envid);
+		if(microlist.size()!=0){
+			throw new StatusException("226","无法删除已经配置微服务的环境");
+		}
 		envservice.deleteEnv(envpo);
 	}
 }
