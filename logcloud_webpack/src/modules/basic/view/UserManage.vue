@@ -6,7 +6,6 @@
       </el-form-item>
       <el-form-item label="角色类型">
         <el-select v-model="formSearch.queryUserType" placeholder="请选择">
-          <el-option label="请选择" value=""></el-option>
           <el-option label="日志查看员" value="Log_viewer"></el-option>
           <el-option label="超级管理员" value="Super_admin"></el-option>
         </el-select>
@@ -132,7 +131,7 @@
       return {
         formSearch: {
           queryUserName: "", //查询中填入的username
-          queryUserType: "", //查询中选择的usertype
+          queryUserType: "Log_viewer", //查询中选择的usertype
         },
         editDialog: false,
         UserForm: {
