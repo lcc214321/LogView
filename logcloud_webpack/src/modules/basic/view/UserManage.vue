@@ -38,7 +38,7 @@
         layout="total, sizes, prev, pager, next, jumper" :total="totalpage"></el-pagination>
     </div>
 
-    <el-dialog title="创建用户" width="450px" :visible.sync="addingDialog" @close="addingDialog = false">
+    <el-dialog title="创建用户" width="450px" :visible.sync="addingDialog" @close="closeAddingForm">
       <el-form :inline="true" inline-message :model="UserForm" ref="addingForm" :rules="rules" label-position="right"
         label-width="120px">
         <el-row>
@@ -77,11 +77,11 @@
         </el-row>
         <el-row class="d-flex justify-content-center">
           <el-button type="primary" @click="adduser">保 存</el-button>
-          <el-button @click="addingDialog = false">取 消</el-button>
+          <el-button @click="closeAddingForm">取 消</el-button>
         </el-row>
       </el-form>
     </el-dialog>
-    <el-dialog title="编辑用户" width="450px" :visible.sync="editDialog" @close="editDialog=false">
+    <el-dialog title="编辑用户" width="450px" :visible.sync="editDialog" @close="closeEditForm">
       <el-form :inline="true" inline-message :model="UserForm" ref="editForm" :rules="rules" label-position="right"
         label-width="120px">
         <el-row>
@@ -108,7 +108,7 @@
         </el-row>
         <el-row class="d-flex justify-content-center">
           <el-button type="primary" @click="edituser">保 存</el-button>
-          <el-button @click="editDialog = false">取 消</el-button>
+          <el-button @click="closeEditForm">取 消</el-button>
         </el-row>
       </el-form>
     </el-dialog>
@@ -310,6 +310,14 @@
           });
         });
 
+      },
+      closeAddingForm(){
+        this.$refs.addingForm.clearValidate();
+        this.addingDialog=false
+      },
+      closeEditForm(){
+        this.$refs.editForm.clearValidate();
+        this.editDialog=false
       }
     },
     watch: {}

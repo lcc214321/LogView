@@ -25,7 +25,7 @@
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
         :current-page.sync="curpageIndex" :page-sizes="[10, 20, 50, 100]" :page-size="10"
         layout="total, sizes, prev, pager, next, jumper" :total="totalpage"></el-pagination>
-      <el-dialog title="新增环境" width="450px" :visible.sync="addingDialog">
+      <el-dialog title="新增环境" width="450px" :visible.sync="addingDialog" @close="closeAddingForm">
         <el-form :inline="true" inline-message :model="EnvForm" ref="addingForm" :rules="rules" label-position="right"
           label-width="120px">
           <el-row>
@@ -40,11 +40,11 @@
           </el-row>
           <el-row class="d-flex justify-content-center">
             <el-button type="primary" @click="addenv">保 存</el-button>
-            <el-button @click="addingDialog = false">取 消</el-button>
+            <el-button @click="closeAddingForm">取 消</el-button>
           </el-row>
         </el-form>
       </el-dialog>
-      <el-dialog title="编辑环境" width="450px" :visible.sync="editDialog">
+      <el-dialog title="编辑环境" width="450px" :visible.sync="editDialog" @close="closeEditForm">
         <el-form :inline="true" inline-message :model="EnvForm" ref="editForm" :rules="rules" label-position="right"
           label-width="120px">
           <el-row>
@@ -59,7 +59,7 @@
           </el-row>
           <el-row class="d-flex justify-content-center">
             <el-button type="primary" @click="editenv">保 存</el-button>
-            <el-button @click="editDialog = false">取 消</el-button>
+            <el-button @click="closeEditForm">取 消</el-button>
           </el-row>
         </el-form>
       </el-dialog>
@@ -208,6 +208,14 @@
           }
         });
 
+      },
+      closeAddingForm(){
+        this.$refs.addingForm.clearValidate();
+        this.addingDialog=false
+      },
+      closeEditForm(){
+        this.$refs.editForm.clearValidate();
+        this.editDialog=false
       }
     }
   };
