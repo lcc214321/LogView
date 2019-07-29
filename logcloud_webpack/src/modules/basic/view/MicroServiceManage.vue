@@ -122,7 +122,7 @@
         </el-form>
       </el-dialog>
       <el-dialog title="编辑环境" width="450px" :visible.sync="editDialog">
-        <el-form :inline="true" inline-message :model="MircroEnvForm" ref="addingForm" :rules="rules"
+        <el-form :inline="true" inline-message :model="MircroEnvForm" ref="editForm" :rules="rules"
           label-position="right" label-width="120px">
           <el-row>
             <el-form-item label="环境名称" prop="EnvId">
@@ -285,53 +285,65 @@
           });
       },
       editMicroEnv() {
-        var url =
-          BASIC_API +
-          "/microenv/edit"
-        var microinfo = {
-          id: this.MircroEnvForm.id,
-          envid: this.MircroEnvForm.EnvId,
-          microservicename: this.MircroEnvForm.MicroServiceName,
-          ostype: this.MircroEnvForm.ostype,
-          ipaddr: this.MircroEnvForm.ipaddr,
-          logpath: this.MircroEnvForm.logpath,
-          lognamepattern: this.MircroEnvForm.lognamepattern,
-          logpattern: this.MircroEnvForm.logpattern,
-          lognamepostfix: this.MircroEnvForm.lognamepostfix,
-          splitstr: this.MircroEnvForm.splitstr
-        }
-        this.$httpWithMsg
-          .put(url, microinfo)
-          .then(response => {
-            console.log(response)
-            this.editDialog = false;
-            this.getEnvPage();
-          });
+        this.$refs.editForm.validate(valid => {
+          if (valid) {
+            var url =
+              BASIC_API +
+              "/microenv/edit"
+            var microinfo = {
+              id: this.MircroEnvForm.id,
+              envid: this.MircroEnvForm.EnvId,
+              microservicename: this.MircroEnvForm.MicroServiceName,
+              ostype: this.MircroEnvForm.ostype,
+              ipaddr: this.MircroEnvForm.ipaddr,
+              logpath: this.MircroEnvForm.logpath,
+              lognamepattern: this.MircroEnvForm.lognamepattern,
+              logpattern: this.MircroEnvForm.logpattern,
+              lognamepostfix: this.MircroEnvForm.lognamepostfix,
+              splitstr: this.MircroEnvForm.splitstr
+            }
+            this.$httpWithMsg
+              .put(url, microinfo)
+              .then(response => {
+                console.log(response)
+                this.editDialog = false;
+                this.getEnvPage();
+              });
+          }
+
+        });
+
       },
       addMicroEnv() {
-        var url =
-          BASIC_API +
-          "/microenv/add"
-        var microinfo = {
-          envid: this.MircroEnvForm.EnvId,
-          microservicename: this.MircroEnvForm.MicroServiceName,
-          ostype: this.MircroEnvForm.ostype,
-          ipaddr: this.MircroEnvForm.ipaddr,
-          loginuser: this.MircroEnvForm.loginuser,
-          loginpassword: this.MircroEnvForm.loginpassword,
-          logpath: this.MircroEnvForm.logpath,
-          lognamepattern: this.MircroEnvForm.lognamepattern,
-          logpattern: this.MircroEnvForm.logpattern,
-          lognamepostfix: this.MircroEnvForm.lognamepostfix,
-          splitstr: this.MircroEnvForm.splitstr
-        }
-        this.$httpWithMsg
-          .post(url, microinfo)
-          .then(response => {
-            console.log(response)
-            this.addingDialog = false;
-            this.getEnvPage();
-          })
+        this.$refs.addingForm.validate(valid => {
+          if (valid) {
+            var url =
+              BASIC_API +
+              "/microenv/add"
+            var microinfo = {
+              envid: this.MircroEnvForm.EnvId,
+              microservicename: this.MircroEnvForm.MicroServiceName,
+              ostype: this.MircroEnvForm.ostype,
+              ipaddr: this.MircroEnvForm.ipaddr,
+              loginuser: this.MircroEnvForm.loginuser,
+              loginpassword: this.MircroEnvForm.loginpassword,
+              logpath: this.MircroEnvForm.logpath,
+              lognamepattern: this.MircroEnvForm.lognamepattern,
+              logpattern: this.MircroEnvForm.logpattern,
+              lognamepostfix: this.MircroEnvForm.lognamepostfix,
+              splitstr: this.MircroEnvForm.splitstr
+            }
+            this.$httpWithMsg
+              .post(url, microinfo)
+              .then(response => {
+                console.log(response)
+                this.addingDialog = false;
+                this.getEnvPage();
+              })
+          }
+
+        });
+
       },
       handleEdit(index, row) {
         this.editDialog = true
@@ -375,7 +387,7 @@
           this.curpageSize +
           "?" +
           param;
-         this.$httpWithMsg
+        this.$httpWithMsg
           .get(url)
           .then(response => {
             this.MicroEnvTablelist = response.data.content;
@@ -423,8 +435,8 @@
     },
     created() {
       //获取当前路径
-      if(JSON.stringify(this.$route.query) !='{}'){
-        this.formSearch.queryEnvId=parseInt(this.$route.query.envid)
+      if (JSON.stringify(this.$route.query) != '{}') {
+        this.formSearch.queryEnvId = parseInt(this.$route.query.envid)
       }
       this.getEnvPage();
       this.getEnv();
@@ -433,7 +445,8 @@
 
 </script>
 <style scoped>
-.input_width_lg {
-  width: 180px;
-}
+  .input_width_lg {
+    width: 180px;
+  }
+
 </style>
