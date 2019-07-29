@@ -118,10 +118,10 @@ public class MicroEnvController extends ControllerSupport {
 	@ApiOperation(value = "删除微服务", notes = "")
 	@DeleteMapping("{envid}")
 	@CrossOrigin(allowCredentials="true")
-	public void deleteMicroEnv(@PathVariable long id){
+	public void deleteMicroEnv(@PathVariable long envid){
 //		EnvPo envpo=envservice.findEnvByid(envid);
 //		envservice.deleteEnv(envpo);
-		MicroServicePo envpo=microenvservice.findMicroEnvByid(id);
+		MicroServicePo envpo=microenvservice.findMicroEnvByid(envid);
 		microenvservice.deleteEnv(envpo);
 	}
 	
