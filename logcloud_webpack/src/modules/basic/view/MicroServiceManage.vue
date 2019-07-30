@@ -570,7 +570,9 @@
         return true;
       },
       handleimport() {
-        this.impDialog = true
+        this.importEnvId="";
+        this.fileList=[]
+        this.impDialog = true 
       },
       //清空文件
       removeFile() {
