@@ -579,13 +579,7 @@
       },
       //下载模板
       exportFile() {
-        var url = BASIC_API +
-          "/microenv/importTemplate";
-        this.$httpWithMsg
-          .get(url)
-          .then(response => {
-            console.log(111111)
-          })
+        window.location.href="http://localhost:8081"+BASIC_API+"/microenv/importTemplate"
 
       }
     },
