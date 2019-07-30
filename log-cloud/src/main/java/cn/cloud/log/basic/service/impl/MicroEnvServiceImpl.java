@@ -56,6 +56,12 @@ public class MicroEnvServiceImpl implements MicroEnvService {
 		// TODO Auto-generated method stub
 		return microenvdao.findByenvid(id);
 	}
+
+	@Override
+	public MicroServicePo findMicroEnvByUniqueIndex(String ipaddr, Long envid, String microservicename) {
+		// TODO Auto-generated method stub
+		return microenvdao.findByenvidAndmicroservicenameAndipaddr(envid, microservicename, ipaddr);
+	}
     
 	
 

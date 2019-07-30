@@ -16,4 +16,5 @@ public interface MicroEnvService {
 	public Page<MicroServicePo> findAllEnv(Specification<MicroServicePo> specification, PageRequest pageRequest);
 	public void deleteEnv(MicroServicePo envpo);
 	public List<MicroServicePo> findAllEnv();
+	public MicroServicePo findMicroEnvByUniqueIndex(String ipaddr,Long envid,String microservicename);
 }

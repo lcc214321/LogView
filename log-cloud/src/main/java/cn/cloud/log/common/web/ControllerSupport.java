@@ -1,8 +1,17 @@
 package cn.cloud.log.common.web;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -72,7 +81,11 @@ public abstract class ControllerSupport {
 			return column;
 		}
 	}
-
+    
+	
+	protected void exportFile(String fileName, File file) throws IOException {
+		
+	}
 	
 	
 

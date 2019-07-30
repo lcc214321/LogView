@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -20,7 +21,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  */
 @Entity
-@Table(name = "tbl_basic_microservice")
+@Table(name = "tbl_basic_microservice", uniqueConstraints = {
+		@UniqueConstraint(columnNames = { "envid", "microservicename ", "ipaddr" }) })
 public class MicroServicePo implements Serializable {
 
 	/**
@@ -34,11 +36,13 @@ public class MicroServicePo implements Serializable {
 	@Column(nullable = false, unique = false, name = "envid")
 	private Long envid;
 	@Column(nullable = false, unique = false, name = "envname")
-    private String envname;// 环境名称
+	private String envname;// 环境名称
 	@Column(nullable = false, unique = false, name = "microservicename")
 	private String microservicename;// key
 	@Column(nullable = false, unique = false, name = "ipaddr")
 	private String ipaddr;// key
+	
+
 	@Column(nullable = false, unique = false, name = "ostype")
 	private String ostype;// key
 	@Column(nullable = false, unique = false, name = "loginuser")
@@ -57,7 +61,9 @@ public class MicroServicePo implements Serializable {
 	private String splitstr;// key
 	@Column(nullable = false, unique = false, name = "updatetime")
 	private String updatetime;// key
-	
+	public void setId(Long id) {
+		this.id = id;
+	}
 	public Long getEnvid() {
 		return envid;
 	}
@@ -69,11 +75,10 @@ public class MicroServicePo implements Serializable {
 	public String getEnvname() {
 		return envname;
 	}
-    
+
 	public void setEnvname(String envname) {
 		this.envname = envname;
 	}
-	
 
 	public String getMicroservicename() {
 		return microservicename;
@@ -106,7 +111,8 @@ public class MicroServicePo implements Serializable {
 	public void setLoginuser(String loginuser) {
 		this.loginuser = loginuser;
 	}
-	@JsonIgnore  
+
+	@JsonIgnore
 	public String getLoginpassword() {
 		return loginpassword;
 	}
