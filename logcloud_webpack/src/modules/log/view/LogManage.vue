@@ -1,53 +1,67 @@
 <template>
   <div class="log">
-    <el-row>
-      <el-input v-model="queryEnvName" placeholder="请输入要查找的环境名称">
-        <template slot="prepend">环境名称:</template>
-      </el-input>
-      <el-input v-model="querymicroserviceName" placeholder="请输入要查找的微服务名称">
-        <template slot="prepend">微服务名称:</template>
-      </el-input>
-      <el-input v-model="queryServiceIP" placeholder="请输入要查找的微服务名称">
-        <template slot="prepend">微服务ip:</template>
-      </el-input>
-    </el-row>
-    <el-row>
-      <el-input v-model="queryLogType" placeholder="请输入要查找的环境名称">
-        <template slot="prepend">日志类型:</template>
-        <el-select v-model="queryLogType" slot="append" placeholder="请选择">
+    <el-form inline :model="formSearch" label-width="90px" ref="primaryForm" style="float:left">
+      <el-form-item label="环境名称">
+        <el-select
+          class="input_width_lg"
+          placeholder="请选择环境"
+          v-model="formSearch.queryEnvId"
+          filterable
+          remote="true"
+          :remote-method="getEnv"
+          @change="changeEnv"
+          clearable
+          @clear="getEnv"
+        >
+          <el-option v-for="item in envList" :key="item.id" :label="item.envname" :value="item.id"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="微服务名称">
+        <el-select
+          class="input_width_lg"
+          placeholder="请选择微服务名称"
+          v-model="formSearch.queryMicroEnvId"
+          filterable
+          clearable
+        >
+          <el-option
+            v-for="item in MicroEnvlist"
+            :key="item.id"
+            :label="item.microservicename"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="日志类型">
+        <el-select v-model="formSearch.queryLogType" placeholder="请选择">
           <el-option label="ERROR" value="ERROR"></el-option>
           <el-option label="INFO" value="INFO"></el-option>
           <el-option label="DEBUG" value="DEBUG"></el-option>
           <el-option label="WARN" value="WARN"></el-option>
         </el-select>
-      </el-input>
-      <el-date-picker v-model="querydate" type="date" placeholder="选择日期">
+      </el-form-item>
+      <el-form-item label="采集日期">
+        <el-date-picker v-model="formSearch.querydate" type="date" placeholder="选择日期">
           <template slot="prepend">日期:</template>
-      </el-date-picker>
-      <el-input v-model="querycontent" placeholder="请输入要查找的内容">
-        <template slot="prepend">查询内容:</template>
-      </el-input>
-    </el-row>
-    <el-row>
-      <el-button type="primary" icon="el-icon-search">查询</el-button>
-      <el-button type="primary" icon="el-icon-plus">采集</el-button>
-    </el-row>
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="查询内容">
+        <el-input v-model="formSearch.querycontent" placeholder="请输入要查找的内容"></el-input>
+      </el-form-item>
+      <el-form-item class="d-block">
+        <el-button type="primary" size="small" icon="el-icon-search" @click="getLogPage">查询</el-button>
+        <el-button type="primary" size="small" icon="el-icon-plus" @click="handlecollect">采集</el-button>
+      </el-form-item>
+    </el-form>
     <div class="logtable">
       <el-table :data="loglist" style="width: 100%">
-        <el-table-column prop="EnvName" label="环境名称" width="180">
-        </el-table-column>
-        <el-table-column prop="MicroServiceName" label="微服务名称" width="180">
-        </el-table-column>
-        <el-table-column prop="ipaddr" label="服务器ip">
-        </el-table-column>
-         <el-table-column prop="logtype" label="日志类型">
-        </el-table-column>
-         <el-table-column prop="collectdate" label="采集日期">
-        </el-table-column>
-         <el-table-column prop="updatetime" label="更新时间">
-        </el-table-column>
-         <el-table-column prop="originfilename" label="来源文件">
-        </el-table-column>
+        <el-table-column prop="EnvName" label="环境名称" width="180"></el-table-column>
+        <el-table-column prop="MicroServiceName" label="微服务名称" width="180"></el-table-column>
+        <el-table-column prop="ipaddr" label="服务器ip"></el-table-column>
+        <el-table-column prop="logtype" label="日志类型"></el-table-column>
+        <el-table-column prop="collectdate" label="采集日期"></el-table-column>
+        <el-table-column prop="updatetime" label="更新时间"></el-table-column>
+        <el-table-column prop="originfilename" label="来源文件"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button size="mini" @click="handleView(scope.$index, scope.row)">查看</el-button>
@@ -59,18 +73,46 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
+export default {
+  data() {
+    return {
+      formSearch: {
         querydate: "",
-        queryEnvName: "",
-        querymicroserviceName: "",
+        queryEnvId: "",
+        queryMicroEnvId: "",
         queryLogType: "ERROR",
         queryServiceIP: "",
-        querycontent: "",
-        loglist: []
+        querycontent: ""
+      },
+      loglist: [],
+      MicroEnvlist: [],
+      envList: []
+    };
+  },
+  methods: {
+    async getLogPage() {},
+    changeEnv(val) {
+      if (val === "") {
+        return;
       }
-    }
+      var url = BASIC_API + "/microenv/queryMicroByEnvId?queryEnvId=" + val;
+      this.$httpWithMsg.get(url).then(response => {
+        this.MicroEnvlist = response.data;
+      });
+    },
+    getEnv() {
+      var url = BASIC_API + "/env/queryEnvList";
+      this.$httpWithMsg.get(url).then(response => {
+        console.log(response);
+        this.envList = response.data;
+      });
+    },
+    handlecollect() {}
   }
-
+};
 </script>
+<style scoped>
+.input_width_lg {
+  width: 180px;
+}
+</style>
