@@ -23,10 +23,32 @@
     },
     {
       path: "/log",
-      name: "考务管理",
+      name: "日志管理",
       groupCode: "LOG_MENUS"
     },
   ]
+
+  const logMenuList=[{"id": 1000,
+    "code": "org",
+    "name": "日志管理",
+    "parentId": null,
+    "groupId": 1,
+    "groupCode": "LOG_MENUS",
+    "hasPrivilege": true,
+    "description": "cao",
+    "updateTime": "2018-06-19 10:55:36",
+    "creationTime": "2018-06-08 13:25:10",
+    "weight": 99,
+    "ext1": "menu",
+    "ext2": null,
+    "ext3": null,
+    "ext4": null,
+    "ext5": "/log/logmanage",
+    "nodeName": "日志管理",
+    "nodeCode": "org",
+    "nodeId": "1000",
+    "parentNodeId": null
+  }]
   const basicMenuList = [{
     "id": 1000,
     "code": "org",
@@ -96,7 +118,7 @@
     data() {
       return {
         isCollapse: false,
-        menuList: basicMenuList
+        menuList: []
       }
     },
     methods: {
@@ -120,13 +142,16 @@
       }
     },
     async created() {
-      //   this.group = routesToMenu.find(v => this.$route.path.startsWith(v.path));
-      //   const groupCode = this.group && this.group.groupCode;
-      //   if (groupCode) {
-      //     this.menuList = await this.getUserPrivileges(groupCode);
-      //     this.UPDATE_MENU_LIST(this.menuList);
-      //     this.updatePath();
-      //   }
+           this.group = routesToMenu.find(v => this.$route.path.startsWith(v.path));  
+           const groupCode = this.group && this.group.groupCode;
+           console.log(groupCode)
+           if (groupCode==="LOG_MENUS") {
+             this.menuList = logMenuList;
+             //this.UPDATE_MENU_LIST(this.menuList);
+             //this.updatePath();
+           }else if(groupCode==="BASIC_MENUS"){
+               this.menuList = basicMenuList;
+           }
     },
     watch: {
       $route() {
