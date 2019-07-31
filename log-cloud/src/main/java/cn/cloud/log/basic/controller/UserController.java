@@ -73,7 +73,7 @@ public class UserController extends ControllerSupport {
 				predicates.add(cb.like(root.get("username"), toSqlSearchPattern(username)));
 			}
 			if (!StringUtils.isEmpty(usertype)) {
-				predicates.add(cb.like(root.get("usertype"), usertype));
+				predicates.add(cb.equal(root.get("usertype"), usertype));
 			}
 		
 

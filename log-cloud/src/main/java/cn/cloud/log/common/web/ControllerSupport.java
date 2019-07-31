@@ -84,7 +84,25 @@ public abstract class ControllerSupport {
     
 	
 	protected void exportFile(String fileName, File file) throws IOException {
-		
+		OutputStream out = null;
+		InputStream in = null;
+		try {
+			in = new FileInputStream(file);
+			fileName = URLEncoder.encode(fileName, "UTF-8");
+			HttpServletResponse response = getResponse();
+			response.reset();
+			response.setHeader("Content-Disposition", "inline; filename=" + fileName);
+			response.addHeader("Content-Length", "" + file.length());
+			response.setContentType("application/octet-stream;charset=UTF-8");
+			out = new BufferedOutputStream(response.getOutputStream());
+			IOUtils.copy(in, out);
+			out.flush();
+		} catch (IOException e) {
+			throw new StatusException("229",e.getMessage());
+		} finally {
+			out.close();
+			in.close();
+		}
 	}
 	
 	
