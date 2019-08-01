@@ -48,7 +48,15 @@ public class LogPo implements Serializable{
 	private String savepath;//文件存储路径
 	@Transient
 	private boolean isinclude;
+	@Column(nullable = false, unique = false, name = "originfileMtime")
+	private String originfileMtime;//源文件修改时间，若修改时间不变则不作处理
 	
+	public String getOriginfileMtime() {
+		return originfileMtime;
+	}
+	public void setOriginfileMtime(String originfileMtime) {
+		this.originfileMtime = originfileMtime;
+	}
 	public Long getId() {
 		return id;
 	}
