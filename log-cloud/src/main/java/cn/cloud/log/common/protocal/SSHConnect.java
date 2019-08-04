@@ -24,12 +24,28 @@ public class SSHConnect {
 	private JSch jsch = new JSch();
 	private Session session;
 	private int port = 22;
-
+	private Channel channel=null;
+   
 	public SSHConnect(String ipaddr, String username, String password) throws JSchException {
 		this.session = jsch.getSession(username, ipaddr, 22);
 		this.session.setPassword(password);
 		session.setConfig("StrictHostKeyChecking", "no");
 		this.session.connect();
+	}
+	
+	public ChannelSftp getiFileSftp() throws JSchException {
+		channel = (Channel) session.openChannel("sftp");
+		channel.connect(1000);
+		ChannelSftp sftp = (ChannelSftp) channel;
+		return sftp;
+	}
+	public void close() {
+		if (session != null) {
+			session.disconnect();
+		}
+		if (channel != null) {
+			channel.disconnect();
+		}
 	}
 
 	/**
@@ -44,12 +60,7 @@ public class SSHConnect {
 		channel.connect(1000);
 		ChannelSftp sftp = (ChannelSftp) channel;
 		walker(sftp,path);
-		if (session != null) {
-			session.disconnect();
-		}
-		if (channel != null) {
-			channel.disconnect();
-		}
+		
 	}
 
 	public void walker(ChannelSftp sftp, String path) throws SftpException {
@@ -69,11 +80,11 @@ public class SSHConnect {
 		}
 	}
 
-	public void downloadFile(String path, String path1) throws JSchException, SftpException, IOException {
+	public void downloadFile(String path, String savepath) throws JSchException, SftpException, IOException {
 		Channel channel = (Channel) session.openChannel("sftp");
 		channel.connect(1000);
 		ChannelSftp sftp = (ChannelSftp) channel;
-		FileOutputStream out = new FileOutputStream(new File(path1));
+		FileOutputStream out = new FileOutputStream(new File(savepath));
 		sftp.get(path, out);
 		out.close();
 		if (session != null) {

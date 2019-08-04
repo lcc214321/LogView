@@ -53,7 +53,6 @@ public class LogController extends ControllerSupport {
 	public Page<LogPo> getLogPage(@PathVariable Integer curPage, @PathVariable Integer curPageSize,
 			@RequestParam(name = "queryEnvId", required = false) String envid,
 			@RequestParam(name = "queryMicroEnvId", required = false) String microenvid,
-			@RequestParam(name = "queryLogType", required = false) String logtype,
 			@RequestParam(name = "queryServiceIP", required = false) String ipaddr,
 			@RequestParam(name = "querydate", required = false) String collectdate,
 			@RequestParam(name = "querycontent", required = false) String querycontent) {
@@ -66,9 +65,9 @@ public class LogController extends ControllerSupport {
 			if (!StringUtils.isEmpty(microenvid)) {
 				predicates.add(cb.equal(root.get("microenvid"), microenvid));
 			}
-			if (!StringUtils.isEmpty(logtype)) {
-				predicates.add(cb.equal(root.get("logtype"), logtype));
-			}
+//			if (!StringUtils.isEmpty(logtype)) {
+//				predicates.add(cb.equal(root.get("logtype"), logtype));
+//			}
 			if (!StringUtils.isEmpty(ipaddr)) {
 				predicates.add(cb.equal(root.get("ipaddr"), ipaddr));
 			}

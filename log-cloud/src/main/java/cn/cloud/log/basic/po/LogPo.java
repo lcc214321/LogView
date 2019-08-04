@@ -36,8 +36,8 @@ public class LogPo implements Serializable{
 	private String microenvname;//采集的微服务名称
 	@Column(nullable = false, unique = false, name = "ipaddr")
 	private String ipaddr;//采集的微服务ip地址
-	@Column(nullable = false, unique = false, name = "logtype")
-	private String logtype;//日志类型error,info,warn,debug,all
+//	@Column(nullable = false, unique = false, name = "logtype")
+//	private String logtype;//日志类型error,info,warn,debug,all
 	@Column(nullable = false, unique = false, name = "collectdate")
 	private String collectdate;//采集时间
 	@Column(nullable = false, unique = false, name = "updatetime")
@@ -92,12 +92,6 @@ public class LogPo implements Serializable{
 	}
 	public void setIpaddr(String ipaddr) {
 		this.ipaddr = ipaddr;
-	}
-	public String getLogtype() {
-		return logtype;
-	}
-	public void setLogtype(String logtype) {
-		this.logtype = logtype;
 	}
 	public String getCollectdate() {
 		return collectdate;
