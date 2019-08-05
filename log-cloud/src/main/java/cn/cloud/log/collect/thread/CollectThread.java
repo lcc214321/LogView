@@ -16,6 +16,7 @@ import cn.cloud.log.basic.po.LogPo;
 import cn.cloud.log.basic.po.MicroServicePo;
 import cn.cloud.log.basic.service.LogService;
 import cn.cloud.log.collect.LinuxCollect;
+import cn.cloud.log.common.constants.ConfigConstants;
 import cn.cloud.log.common.protocal.SSHConnect;
 import cn.cloud.log.exception.StatusException;
 import cn.cloud.log.util.DateUtil;
@@ -29,8 +30,7 @@ import io.netty.util.internal.StringUtil;
  *
  */
 public class CollectThread implements Runnable {
-    @Value("${log.root}")  
-    private String logroot;
+
 	private LogService logservice;
 	private MicroServicePo micropo;
 	private String collectdate;
@@ -67,11 +67,11 @@ public class CollectThread implements Runnable {
 								} else {
 									if(!this.isfilter(v)){
 										String serverpath=micropo.getMicroservicename()+"_"+micropo.getIpaddr();
-										String savepath=logroot+File.separator+serverpath+File.separator+collectdate;
+										String savepath=ConfigConstants.logroot+"/"+serverpath+"/"+collectdate;
 										String originpath=filepath + "/" + v.getFilename();
 										FileUtil.mkdir(savepath);
-										savepath=savepath+File.separator+v.getFilename();
-										conn.downloadFile(originpath, savepath);
+										savepath=savepath+"/"+v.getFilename();
+										conn.downloadFile(sftp,originpath, savepath);
 										LogPo logPo=logservice.findlogbyoriginfilenameandmtime(v.getFilename(), v.getAttrs().getMtimeString(),micropo.getId());
 										if(logPo!=null){
 											return;
@@ -173,6 +173,8 @@ public class CollectThread implements Runnable {
 
 			};
 			collect.collect();
+			conn.close();
+
 		} catch (JSchException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

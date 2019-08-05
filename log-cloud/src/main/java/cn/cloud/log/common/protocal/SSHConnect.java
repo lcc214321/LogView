@@ -35,7 +35,7 @@ public class SSHConnect {
 	
 	public ChannelSftp getiFileSftp() throws JSchException {
 		channel = (Channel) session.openChannel("sftp");
-		channel.connect(1000);
+		channel.connect();
 		ChannelSftp sftp = (ChannelSftp) channel;
 		return sftp;
 	}
@@ -80,19 +80,10 @@ public class SSHConnect {
 		}
 	}
 
-	public void downloadFile(String path, String savepath) throws JSchException, SftpException, IOException {
-		Channel channel = (Channel) session.openChannel("sftp");
-		channel.connect(1000);
-		ChannelSftp sftp = (ChannelSftp) channel;
+	public void downloadFile(ChannelSftp sftp,String path, String savepath) throws JSchException, SftpException, IOException {
 		FileOutputStream out = new FileOutputStream(new File(savepath));
 		sftp.get(path, out);
 		out.close();
-		if (session != null) {
-			session.disconnect();
-		}
-		if (channel != null) {
-			channel.disconnect();
-		}
 	}
 
 	public static void main(String[] args) {
