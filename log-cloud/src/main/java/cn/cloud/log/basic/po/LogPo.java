@@ -48,7 +48,10 @@ public class LogPo implements Serializable{
 	private String savepath;//文件存储路径
 	@Transient
 	private boolean isinclude;
-	@Column(nullable = false, unique = false, name = "originfileMtime")
+
+	@Transient
+	private boolean canView;
+	@Column(nullable = false, unique = false, name = "originfilemtime")
 	private String originfileMtime;//源文件修改时间，若修改时间不变则不作处理
 	
 	public String getOriginfileMtime() {
@@ -122,5 +125,11 @@ public class LogPo implements Serializable{
 	}
 	public void setIsinclude(boolean isinclude) {
 		this.isinclude = isinclude;
+	}
+	public boolean isCanView() {
+		return canView;
+	}
+	public void setCanView(boolean canView) {
+		this.canView = canView;
 	}
 }

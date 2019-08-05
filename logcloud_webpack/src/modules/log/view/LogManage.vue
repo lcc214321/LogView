@@ -145,7 +145,17 @@ export default {
         this.envList = response.data;
       });
     },
-    handlecollect() {},
+    handlecollect() {
+      var param = new URLSearchParams(this.formSearch);
+      var url =
+        LOG_API +
+        "/log/collect" +
+        "?" +
+        param;
+      this.$httpWithMsg.post(url).then(response => {
+          console.log(response)
+      });
+    },
     getLogPageByContent() {},
     handleView(index, row) {
       var url = LOG_API + "/log/viewlog/" + row.id + "/" + this.curstartpos;

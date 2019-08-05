@@ -14,6 +14,6 @@ public class DateUtil {
    
    public static String formateDate(Long value,String formatstr) throws ParseException {
 	   SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatstr);
-       return simpleDateFormat.format(new Date(value));
+       return simpleDateFormat.format(new Date(value*1000));
    }
 }

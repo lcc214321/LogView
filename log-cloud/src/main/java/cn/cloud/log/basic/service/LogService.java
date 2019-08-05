@@ -15,4 +15,6 @@ public interface LogService {
 	   public LogPo SaveLog(LogPo env);
 	   public Page<LogPo> findAllLog(Specification<LogPo> specification,PageRequest pageRequest);
 	   public List<LogPo> findAllLog(Specification<LogPo> specification);//不分页查询
+	   public LogPo findlogbyoriginfilenameandmtime(String filename,String mtime,Long microid);
+	   
 }

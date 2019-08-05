@@ -62,6 +62,12 @@ public class MicroEnvServiceImpl implements MicroEnvService {
 		// TODO Auto-generated method stub
 		return microenvdao.findByenvidAndmicroservicenameAndipaddr(envid, microservicename, ipaddr);
 	}
+
+	@Override
+	public List<MicroServicePo> findAllEnv(Specification<MicroServicePo> specification) {
+		// TODO Auto-generated method stub
+		return microenvdao.findAll(specification);
+	}
     
 	
 

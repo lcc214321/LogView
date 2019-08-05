@@ -28,8 +28,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import cn.cloud.log.basic.po.LogPo;
+import cn.cloud.log.basic.po.MicroServicePo;
 import cn.cloud.log.basic.service.LogService;
+import cn.cloud.log.basic.service.MicroEnvService;
+import cn.cloud.log.collect.thread.CollectThread;
 import cn.cloud.log.common.web.ControllerSupport;
+import cn.cloud.log.util.SparkUtil;
 import io.swagger.annotations.ApiOperation;
 
 @Transactional
@@ -39,12 +43,42 @@ public class LogController extends ControllerSupport {
 
 	@Autowired
 	LogService logservice;
+	@Autowired
+	MicroEnvService microservice;
+	
+	
 
 	@ApiOperation(value = "采集日志", notes = "")
 	@PostMapping("collect")
 	@CrossOrigin(allowCredentials="true")
-	public void collect(){
+	public void collect(@RequestParam(name = "queryEnvId", required = false) String envid,
+			@RequestParam(name = "queryMicroEnvId", required = false) String microenvid,
+			@RequestParam(name = "queryServiceIP", required = false) String ipaddr,
+			@RequestParam(name = "querydate", required = false) String collectdate,
+			@RequestParam(name = "querycontent", required = false) String querycontent){
 		
+		Specification<MicroServicePo> specification = (root, query, cb) -> {
+			List<Predicate> predicates = new ArrayList<>();
+			if (!StringUtils.isEmpty(envid)) {
+				predicates.add(cb.equal(root.get("envid"), envid));
+			}
+			if (!StringUtils.isEmpty(microenvid)) {
+				predicates.add(cb.equal(root.get("id"), microenvid));
+			}
+//			if (!StringUtils.isEmpty(logtype)) {
+//				predicates.add(cb.equal(root.get("logtype"), logtype));
+//			}
+			if (!StringUtils.isEmpty(ipaddr)) {
+				predicates.add(cb.equal(root.get("ipaddr"), ipaddr));
+			}
+			return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+		};
+		
+		List<MicroServicePo> list=microservice.findAllEnv(specification);
+		for(MicroServicePo collectpo:list){
+			CollectThread thread=new CollectThread(logservice,collectpo,collectdate);
+			thread.run();
+		}
 	}
 
 	@ApiOperation(value = "查询日志", notes = "")
@@ -85,7 +119,16 @@ public class LogController extends ControllerSupport {
 		if(!StringUtils.isEmpty(querycontent)){
 			List<LogPo> listpo=page.getContent();
 			for(LogPo po:listpo){
-				
+				if(SparkUtil.isinclude(po.getSavepath(), querycontent)){
+					po.setIsinclude(true);
+				}else{
+					po.setIsinclude(false);
+				}
+				if(new File(po.getSavepath()).length()>10240){
+					po.setCanView(false);
+				}else{
+					po.setCanView(true);
+				}
 			}
 		}
 		

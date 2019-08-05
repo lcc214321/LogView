@@ -40,6 +40,12 @@ public class LogServiceImpl implements LogService{
 		// TODO Auto-generated method stub
 		return logdao.findAll(specification);
 	}
+
+	@Override
+	public LogPo findlogbyoriginfilenameandmtime(String filename, String mtime,Long microid) {
+		// TODO Auto-generated method stub
+		return logdao.findlog(filename, mtime,microid);
+	}
 	
 	
 	

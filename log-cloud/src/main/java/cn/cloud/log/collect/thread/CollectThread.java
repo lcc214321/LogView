@@ -72,6 +72,10 @@ public class CollectThread implements Runnable {
 										FileUtil.mkdir(savepath);
 										savepath=savepath+File.separator+v.getFilename();
 										conn.downloadFile(originpath, savepath);
+										LogPo logPo=logservice.findlogbyoriginfilenameandmtime(v.getFilename(), v.getAttrs().getMtimeString(),micropo.getId());
+										if(logPo!=null){
+											return;
+										}
 										LogPo logpo=new LogPo();
 										logpo.setCollectdate(collectdate);
 										logpo.setEnvid(micropo.getEnvid());
@@ -117,9 +121,9 @@ public class CollectThread implements Runnable {
 						 splitstr=";";
 					 }
 					 //和采集日期比较若不符合,过滤
-					 String mtime=file.getAttrs().getMtimeString();
+					 int mtime=file.getAttrs().getMTime();
 					 Long mtimevalue=Long.valueOf(mtime);
-					 String date1=DateUtil.formateDate(mtimevalue, "yyyy-mm-dd");
+					 String date1=DateUtil.formateDate(mtimevalue, "yyyy-MM-dd");
 					 if(!date1.equals(collectdate)) {
 						 return true;
 					 }

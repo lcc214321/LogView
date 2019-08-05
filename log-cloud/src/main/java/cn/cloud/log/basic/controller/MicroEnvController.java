@@ -98,6 +98,7 @@ public class MicroEnvController extends ControllerSupport {
 	public void addEnv(@RequestBody MicroEnvInfo envinfo) {
 		MicroServicePo envpo = new MicroServicePo();
 		EnvPo poenv = envservice.findEnvByid(envinfo.getEnvid());
+		envpo.setEnvid(poenv.getId());
 		envpo.setEnvname(poenv.getEnvname());
 		envpo.setIpaddr(envinfo.getIpaddr());
 		envpo.setLoginpassword(envinfo.getLoginpassword());

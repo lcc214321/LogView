@@ -1,5 +1,6 @@
 package cn.cloud.log;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.api.java.function.VoidFunction;
 
+import cn.cloud.log.util.DateUtil;
 import scala.Tuple2;
 import scala.collection.mutable.HashMap;
 import scala.collection.mutable.Map;
@@ -21,12 +23,12 @@ public class test {
 	private static List<String> errinfo=new ArrayList<String>();
 	private static String regex="(?<time>\\d{4}-\\d{2}-\\d{2}\\s+\\d{2}:\\d{2}:\\d{2}\\.\\d{3})\\|\\s+(?<level>[A-Z]+)\\s+\\|\\s+[0-9a-z]+\\s+-\\s+(\\S+)\\s+\\|\\s+\\[HTTP-([A-Z]+)\\]\\.\\s+(?<content>.*)";
 	private static Pattern pattern=Pattern.compile(regex);
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ParseException {
 //		SparkConf conf = new SparkConf().setMaster("local[2]").setAppName("mytest");
 //		JavaSparkContext sc = new JavaSparkContext(conf);
 //		long starttime=System.currentTimeMillis();
 //		JavaPairRDD<String,Long> lines = sc.textFile("D:/interface-2019.07.31.05-1.log").zipWithIndex();
-		
+		System.out.println(DateUtil.formateDate(Long.valueOf(1564941599),"yyyy-MM-dd"));
 		
 	}
 	
