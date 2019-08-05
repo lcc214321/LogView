@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cn.cloud.log.basic.po.LogPo;
 import cn.cloud.log.basic.po.MicroServicePo;
+import cn.cloud.log.basic.service.AsyncService;
 import cn.cloud.log.basic.service.LogService;
 import cn.cloud.log.basic.service.MicroEnvService;
 import cn.cloud.log.collect.thread.CollectThread;
@@ -45,9 +46,10 @@ public class LogController extends ControllerSupport {
 	LogService logservice;
 	@Autowired
 	MicroEnvService microservice;
+	@Autowired
+	AsyncService asyncservice;
 	
-	
-
+    
 	@ApiOperation(value = "采集日志", notes = "")
 	@PostMapping("collect")
 	@CrossOrigin(allowCredentials="true")
@@ -76,8 +78,7 @@ public class LogController extends ControllerSupport {
 		
 		List<MicroServicePo> list=microservice.findAllEnv(specification);
 		for(MicroServicePo collectpo:list){
-			CollectThread thread=new CollectThread(logservice,collectpo,collectdate);
-			thread.run();
+			asyncservice.executeAsync(collectpo, collectdate);
 		}
 	}
 
@@ -124,11 +125,6 @@ public class LogController extends ControllerSupport {
 				}else{
 					po.setIsinclude(false);
 				}
-				if(new File(po.getSavepath()).length()>10240){
-					po.setCanView(false);
-				}else{
-					po.setCanView(true);
-				}
 			}
 		}
 		
@@ -152,6 +148,7 @@ public class LogController extends ControllerSupport {
 		InputStream in =new FileInputStream(file);
 		byte[] bytes=new byte[in.available()];
 		in.read(bytes);
+		in.close();
 		return new String(bytes,"utf-8");
 	}
 	
@@ -162,7 +159,6 @@ public class LogController extends ControllerSupport {
 		LogPo logpo=logservice.findLogByid(curid);
 		String filepath=logpo.getSavepath();
 		File file=new File(filepath);
-		InputStream in =new FileInputStream(file);
 		exportFile(file.getName(), file);
 	}
 	

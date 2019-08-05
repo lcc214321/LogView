@@ -29,13 +29,12 @@ import io.netty.util.internal.StringUtil;
  * @author win10
  *
  */
-public class CollectThread implements Runnable {
+public class CollectThread{
 
 	private LogService logservice;
 	private MicroServicePo micropo;
 	private String collectdate;
 
-	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 		if (micropo.getOstype().equals("linux")) {
@@ -75,8 +74,13 @@ public class CollectThread implements Runnable {
 										LogPo logPo=logservice.findlogbyoriginfilenameandmtime(v.getFilename(), v.getAttrs().getMtimeString(),micropo.getId());
 										if(logPo!=null){
 											return;
-										}
+										}									
 										LogPo logpo=new LogPo();
+										if(new File(savepath).length()>10240*1024){
+											logpo.setCanView(false);
+										}else{
+											logpo.setCanView(true);
+										}
 										logpo.setCollectdate(collectdate);
 										logpo.setEnvid(micropo.getEnvid());
 										logpo.setEnvname(micropo.getEnvname());
